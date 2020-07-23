@@ -1,21 +1,23 @@
 <?php
 
 $items = [
-    ['price' => 12312, 'quantity' => 4],
-    ['price' => 91201, 'quantity' => 2],
-    ['price' => 12312, 'quantity' => 2],
-    ['price' => 15, 'quantity' => 3],
-    ['price' => 119, 'quantity' => 7],
-    ['price' => 119, 'quantity' => 7],
-    ['price' => 119, 'quantity' => 3],
-    ['price' => 119, 'quantity' => 1],
-    ['price' => 142, 'quantity' => 2],
-    ['price' => 42, 'quantity' => 10],
-    ['price' => 1, 'quantity' => 3],
-    ['price' => 12, 'quantity' => 9],
+    ['sum' => 12312, 'count' => 4],
+    ['sum' => 91201, 'count' => 2],
+    ['sum' => 12312, 'count' => 2],
+    ['sum' => 15, 'count' => 3],
+    ['sum' => 119, 'count' => 7],
+    ['sum' => 119, 'count' => 7],
+    ['sum' => 119, 'count' => 3],
+    ['sum' => 119, 'count' => 1],
+    ['sum' => 142, 'count' => 2],
+    ['sum' => 42, 'count' => 10],
+    ['sum' => 6, 'count' => 3],
+    ['sum' => 12, 'count' => 9],
 ];
 
-uasort($items, function ($a, $b) {
+$discount = 20000;
+
+/*uasort($items, function ($a, $b) {
     return $b['price'] <=> $a['price'] ;
 });
 //$itemsSumMan = 257152;
@@ -34,7 +36,21 @@ $itemsSumNew = getItemsSum($newItems);
 echo "{$itemsSum} -> {$itemsSumNew}\n";
 echo sprintf('%s -> %s',
     round($itemsSum - $discount),
-    round($itemsSumNew + $discount, 2));
+    round($itemsSumNew + $discount, 2));*/
+//$itemsSum = getItemsSum($items);
+$itemsNew = getProportionalSums($discount, $items, 2);
+
+$oldSum = 0;
+$newSum = 0;
+foreach ($itemsNew as $item) {
+    $oldSum += $item['init'];
+    $final = $item['init'] - $item['final'];
+    $newSum += $final;
+    echo "{$item['init']} -> {$final}\n";
+}
+echo "\n\n\n";
+echo "{$oldSum} -> {$newSum}\n";
+echo $oldSum - $discount;
 
 function applyDiscount(array $items, int $discount): array
 {
@@ -60,7 +76,7 @@ function getItemsSum(array $items): float
 
 function getItemSum(array $item)
 {
-    return round($item['price'] * $item['quantity'], 2);
+    return round($item['sum'] * $item['count'], 2);
 }
 
 
@@ -86,7 +102,7 @@ function getItemSum(array $item)
  *    "init"  - начальная сумма, равная соответствующему входному коэффициенту
  *    "final" - сумма после распределения
  */
-public function getProportionalSums(float $sum, array $arCoefficients, int $precision) : array
+ function getProportionalSums(float $sum, array $arCoefficients, int $precision) : array
 {
     $arResult = [];
 
